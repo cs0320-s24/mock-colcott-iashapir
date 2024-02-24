@@ -22,9 +22,21 @@ export function REPLInput(props : REPLInputProps) {
      * We suggest breaking down this component into smaller components, think about the individual pieces 
      * of the REPL and how they connect to each other...
      */
+    function handleA(inputString: string){
+
+      return inputString;
+    }
+
+    var message = "";
+
+    
     function handleSubmit(commandString: string){
+      const tokens = commandString.split(' ');
       setCount(count + 1);
-      props.setHistory([...props.history, commandString]);
+      if (tokens[0] == "a"){
+        message = handleA(tokens[1]); 
+      }
+      props.setHistory([...props.history, tokens[0] + " " + message]);
       setCommandString("");
     }
 
