@@ -14,7 +14,12 @@ export function REPLInput(props : REPLInputProps) {
     // Manages the contents of the input box
     const [commandString, setCommandString] = useState<string>('');
     // TODO WITH TA : add a count state
-    const [count, setCount] = useState<number>(0);
+
+    const [isBrief, setIsBrief] = useState<boolean>(false);
+
+    const functionMap: Readonly<{ [key: string]: (args: string[]) => string}> = {
+      "mode": handleMode
+    };
     // TODO WITH TA: build a handleSubmit function called in button onClick
     // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
     // add to it with new commands.
@@ -22,21 +27,42 @@ export function REPLInput(props : REPLInputProps) {
      * We suggest breaking down this component into smaller components, think about the individual pieces 
      * of the REPL and how they connect to each other...
      */
-    function handleA(inputString: string){
+    
 
-      return inputString;
+    function handleMode(inputString: string[]){
+      var message;
+      if(inputString.length != 1){
+        return "Mode takes one argument, 'brief' or 'verbose', but you provided " + inputString.length;
+      }
+      if (inputString[0] == "brief"){
+        if(isBrief){
+          return "You are already in brief mode";
+        }
+        setIsBrief(true);
+        return "Success! You have switched to brief mode"
+      } else if (inputString[0] == "verbose"){
+        if(!isBrief){
+          return "You are already in verbose mode";
+        }
+        setIsBrief(false);
+        return "Success! You have switched to verbose mode"
+      }else{
+        return "Mode argument must be either 'brief' or 'verbose', but you provided " + inputString[0];
+      }
+      return message;
     }
-
-    var message = "";
 
     
     function handleSubmit(commandString: string){
       const tokens = commandString.split(' ');
-      setCount(count + 1);
-      if (tokens[0] == "a"){
-        message = handleA(tokens[1]); 
+      const command = tokens[0];
+      tokens.shift();
+      const functionResult = functionMap[command](tokens);
+      if(isBrief){
+        props.setHistory([...props.history, functionResult]);
+      }else{
+        props.setHistory([...props.history, "Command: " + commandString + " Output: " + functionResult]);
       }
-      props.setHistory([...props.history, tokens[0] + " " + message]);
       setCommandString("");
     }
 
