@@ -1,7 +1,7 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import { HistoryElement } from "./historyElement";
+import { HistoryElement } from "./HistoryElement";
 
 interface REPLInputProps {
   history: HistoryElement[];
@@ -16,7 +16,7 @@ export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   // TODO WITH TA : add a count state
 
-  const [isBrief, setIsBrief] = useState<boolean>(false);
+  const [isBrief, setIsBrief] = useState<boolean>(true);
 
   const functionMap: Readonly<{
     [key: string]: (args: string[]) => string | string[][];
@@ -65,8 +65,9 @@ export function REPLInput(props: REPLInputProps) {
     const command = tokens[0];
     var functionResult: HistoryElement = {
       response: "",
-      command: tokens,
-      isBrief: true,
+      command: command,
+      isBrief: isBrief,
+      fullCommand: commandString
     };
     tokens.shift();
     if (!(command in functionMap)) {

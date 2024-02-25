@@ -1,5 +1,6 @@
 export interface HistoryElement {
   response: string | string[][];
-  command: string[];
+  command: string;
   isBrief: boolean;
+  fullCommand: string;
 }
