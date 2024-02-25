@@ -5,6 +5,7 @@ import { HistoryElement } from "./historyElement";
 import { ReactElement } from 'react';
 
 import { view } from "./CSVFunctions";
+import { search } from "./CSVFunctions";
 
 interface REPLInputProps {
   history: HistoryElement[];
@@ -25,7 +26,8 @@ export function REPLInput(props: REPLInputProps) {
     [key: string]: (args: string[]) => ReactElement;
   }> = {
     mode: handleMode,
-    view: view 
+    view: view,
+    search: search
   };
   // TODO WITH TA: build a handleSubmit function called in button onClick
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
@@ -38,32 +40,32 @@ export function REPLInput(props: REPLInputProps) {
   function handleMode(inputString: string[]) {
     if (inputString.length != 1) {
       return (
-        <p>Mode takes one argument, 'brief' or 'verbose', but you provided {inputString.length}</p>
+        <span>Mode takes one argument, 'brief' or 'verbose', but you provided {inputString.length}</span>
       );
     }
     if (inputString[0] == "brief") {
       if (isBrief) {
       return (
-        <p>You are already in brief mode</p>
+        <span>You are already in brief mode</span>
       );
       }
       setIsBrief(true);
       return (
-        <p>Success! You have switched to brief mode</p>
+        <span>Success! You have switched to brief mode</span>
       );
     } else if (inputString[0] == "verbose") {
       if (!isBrief) {
         return (
-         <p>You are already in verbose mode</p>
+         <span>You are already in verbose mode</span>
         );
       }
       setIsBrief(false);
       return (
-        <p>Success! You have switched to verbose mode</p>
+        <span>Success! You have switched to verbose mode</span>
       );
     } else {
       return (
-        <p>Mode argument must be either 'brief' or 'verbose', but you provided {inputString[0]}</p>
+        <span>Mode argument must be either 'brief' or 'verbose', but you provided {inputString[0]}</span>
       );
     }
   }
@@ -72,14 +74,14 @@ export function REPLInput(props: REPLInputProps) {
     const tokens = commandString.split(" ");
     const command = tokens[0];
     var functionResult: HistoryElement = {
-      response: <p></p>,
+      response: <span></span>,
       command: command,
       isBrief: isBrief,
       fullCommand: commandString
     };
     tokens.shift();
     if (!(command in functionMap)) {
-      functionResult.response = <p>Command '{command}' not found.</p>
+      functionResult.response = <span>Command '{command}' not found.</span>
     } else {
       functionResult.response = functionMap[command](tokens);
     }
