@@ -1,10 +1,11 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
+import { HistoryElement } from "./historyElement";
 
 interface REPLInputProps {
-  history: string[];
-  setHistory: Dispatch<SetStateAction<string[]>>;
+  history: HistoryElement[];
+  setHistory: Dispatch<SetStateAction<HistoryElement[]>>;
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
@@ -17,7 +18,9 @@ export function REPLInput(props: REPLInputProps) {
 
   const [isBrief, setIsBrief] = useState<boolean>(false);
 
-  const functionMap: Readonly<{ [key: string]: (args: string[]) => string }> = {
+  const functionMap: Readonly<{
+    [key: string]: (args: string[]) => string | string[][];
+  }> = {
     mode: handleMode,
   };
   // TODO WITH TA: build a handleSubmit function called in button onClick
@@ -60,21 +63,25 @@ export function REPLInput(props: REPLInputProps) {
   function handleSubmit(commandString: string) {
     const tokens = commandString.split(" ");
     const command = tokens[0];
-    var functionResult = "";
+    var functionResult: HistoryElement = {
+      response: "",
+      command: tokens,
+      isBrief: true,
+    };
     tokens.shift();
     if (!(command in functionMap)) {
-      functionResult = "Command: " + command + " not found.";
+      functionResult.response = "Command: " + command + " not found.";
     } else {
-      functionResult = functionMap[command](tokens);
+      functionResult.response = functionMap[command](tokens);
     }
-    if (isBrief) {
-      props.setHistory([...props.history, functionResult]);
-    } else {
-      props.setHistory([
-        ...props.history,
-        "Command: " + commandString + " Output: " + functionResult,
-      ]);
-    }
+    // if (isBrief) {
+    props.setHistory([...props.history, functionResult]);
+    // } else {
+    //   props.setHistory([
+    //     ...props.history,
+    //     "Command: " + commandString + " Output: " + functionResult,
+    //   ]);
+    // }
     setCommandString("");
   }
 
