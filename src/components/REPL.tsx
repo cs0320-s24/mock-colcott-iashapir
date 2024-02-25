@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../styles/main.css";
 import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
-import { HistoryElement } from "./HistoryElement";
+import { HistoryElement } from "./historyElement";
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 

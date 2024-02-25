@@ -17,6 +17,13 @@
   background-color:antiquewhite;
 }
 
+.repl-history-output {
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
 .repl-input {
   margin: auto;
   height: 10vh;

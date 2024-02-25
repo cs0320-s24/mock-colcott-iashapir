@@ -1,5 +1,5 @@
 import "../styles/main.css";
-import { HistoryElement } from "./HistoryElement";
+import { HistoryElement } from "./historyElement";
 
 interface REPLHistoryProps {
   history: HistoryElement[];
@@ -12,14 +12,17 @@ export function REPLHistory(props: REPLHistoryProps) {
       <p>Command history:</p>
       {/* This is where command history will go */}
       {/* TODO: To go through all the pushed commands... try the .map() function! */}
-      {props.history.map((command, index) => (
+      {props.history.map((command) => (
         command.isBrief ? (
-          <p key = {index}> {command.response}</p> 
+            <div className="repl-history-output">
+                {command.response}
+            </div>
         ) : (
-            <div>
-                <p key = {index}>Command: {command.response}</p>
-                <p key = {index}>Ouput: {command.response}</p> 
-          </div>
+            <div className="repl-history-output">
+                <p>Command: {command.fullCommand}</p>
+                <p>Ouput:</p> 
+                {command.response}
+            </div>
         )
       ))}
     </div>

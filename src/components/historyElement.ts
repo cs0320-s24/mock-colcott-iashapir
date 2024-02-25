@@ -1,5 +1,7 @@
+import { ReactElement } from 'react';
+
 export interface HistoryElement {
-  response: string | string[][];
+  response: ReactElement;
   command: string;
   isBrief: boolean;
   fullCommand: string;

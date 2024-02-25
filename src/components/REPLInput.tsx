@@ -1,7 +1,10 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import { HistoryElement } from "./HistoryElement";
+import { HistoryElement } from "./historyElement";
+import { ReactElement } from 'react';
+
+import { view } from "./CSVFunctions";
 
 interface REPLInputProps {
   history: HistoryElement[];
@@ -19,9 +22,10 @@ export function REPLInput(props: REPLInputProps) {
   const [isBrief, setIsBrief] = useState<boolean>(true);
 
   const functionMap: Readonly<{
-    [key: string]: (args: string[]) => string | string[][];
+    [key: string]: (args: string[]) => ReactElement;
   }> = {
     mode: handleMode,
+    view: view 
   };
   // TODO WITH TA: build a handleSubmit function called in button onClick
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
@@ -32,46 +36,50 @@ export function REPLInput(props: REPLInputProps) {
    */
 
   function handleMode(inputString: string[]) {
-    var message;
     if (inputString.length != 1) {
       return (
-        "Mode takes one argument, 'brief' or 'verbose', but you provided " +
-        inputString.length
+        <p>Mode takes one argument, 'brief' or 'verbose', but you provided {inputString.length}</p>
       );
     }
     if (inputString[0] == "brief") {
       if (isBrief) {
-        return "You are already in brief mode";
+      return (
+        <p>You are already in brief mode</p>
+      );
       }
       setIsBrief(true);
-      return "Success! You have switched to brief mode";
+      return (
+        <p>Success! You have switched to brief mode</p>
+      );
     } else if (inputString[0] == "verbose") {
       if (!isBrief) {
-        return "You are already in verbose mode";
+        return (
+         <p>You are already in verbose mode</p>
+        );
       }
       setIsBrief(false);
-      return "Success! You have switched to verbose mode";
+      return (
+        <p>Success! You have switched to verbose mode</p>
+      );
     } else {
       return (
-        "Mode argument must be either 'brief' or 'verbose', but you provided " +
-        inputString[0]
+        <p>Mode argument must be either 'brief' or 'verbose', but you provided {inputString[0]}</p>
       );
     }
-    return message;
   }
 
   function handleSubmit(commandString: string) {
     const tokens = commandString.split(" ");
     const command = tokens[0];
     var functionResult: HistoryElement = {
-      response: "",
+      response: <p></p>,
       command: command,
       isBrief: isBrief,
       fullCommand: commandString
     };
     tokens.shift();
     if (!(command in functionMap)) {
-      functionResult.response = "Command: " + command + " not found.";
+      functionResult.response = <p>Command '{command}' not found.</p>
     } else {
       functionResult.response = functionMap[command](tokens);
     }
