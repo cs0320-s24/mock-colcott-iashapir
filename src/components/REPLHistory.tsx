@@ -6,14 +6,22 @@ interface REPLHistoryProps {
   // TODO: Fill with some shared state tracking all the pushed commands
 }
 export function REPLHistory(props: REPLHistoryProps) {
-  const commandHistory = props.history;
   return (
     <div className="repl-history">
       <p>Command history:</p>
       {/* This is where command history will go */}
       {/* TODO: To go through all the pushed commands... try the .map() function! */}
       {props.history.map((command) => (
-        <p>{command.response}</p>
+        command.isBrief ? (
+            <div className="repl-history-output">
+                <p>{command.response}</p>
+            </div>
+        ) : (
+            <div className="repl-history-output">
+                <p>Command: {command.fullCommand}</p>
+                <p>Ouput: {command.response}</p> 
+            </div>
+        )
       ))}
     </div>
   );
