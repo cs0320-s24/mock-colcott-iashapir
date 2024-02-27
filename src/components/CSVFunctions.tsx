@@ -77,7 +77,7 @@ export function search(args: string[]){
     if(csvSearchMap.has(currentCSV)){
         return convertStringList(csvSearchMap.get(currentCSV)!);
     }else{
-        return <span>Search unsuccessful</span>
+        return <span>Search unsuccessful</span>;
     }
 }
 
