@@ -71,7 +71,9 @@ test("after I click the submit button, nothing about the button changes", async 
   //await expect(page.getByLabel("Submit")).toHaveText()
 });
 
-test("after I click the button, my command gets pushed", async ({ page }) => {
+test("after I click the button, incorrect command pushed, 'command not found' received", async ({
+  page,
+}) => {
   await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Command input").fill("Test");
