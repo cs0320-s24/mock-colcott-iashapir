@@ -28,6 +28,12 @@
 .repl-history table {
     margin-left: auto;
     margin-right: auto; /* Specifically center tables */
+    border-collapse: collapse;
+}
+
+/* not sure this is doing anything*/
+.repl-history td{
+  padding: 10px;
 }
 
 .repl-input {
