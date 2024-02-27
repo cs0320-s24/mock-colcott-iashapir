@@ -4,8 +4,7 @@ import { ControlledInput } from "./ControlledInput";
 import { HistoryElement } from "./historyElement";
 import { ReactElement } from 'react';
 
-import { view } from "./CSVFunctions";
-import { search } from "./CSVFunctions";
+import { view, search, loadFile } from "./CSVFunctions";
 
 interface REPLInputProps {
   history: HistoryElement[];
@@ -27,7 +26,8 @@ export function REPLInput(props: REPLInputProps) {
   }> = {
     mode: handleMode,
     view: view,
-    search: search
+    search: search,
+    load_file: loadFile
   };
   // TODO WITH TA: build a handleSubmit function called in button onClick
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
