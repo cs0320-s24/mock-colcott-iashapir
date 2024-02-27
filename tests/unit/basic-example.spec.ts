@@ -2,8 +2,8 @@
   Demo: test ordinary Java/TypeScript
 */
 
-//import { expect, test } from "vitest";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "vitest";
+//import { expect, test } from "@playwright/test";
 
 // all exports from main will now be available as main.X
 // import * as main from '../mock/src/main';
