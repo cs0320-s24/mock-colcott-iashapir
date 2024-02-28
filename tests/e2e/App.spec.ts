@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 /**
-  The general shapes of tests in Playwright Test are:
-    1. Navigate to a URL
-    2. Interact with the page
-    3. Assert something about the page against your expectations
-  Look for this pattern in the tests below!
+ * TESTS TO WRITE:
+ * - load then view then search
+ * - load one file then load a different file
+ * - test every case for error messages
  */
 
 // If you needed to do something before every test case...
@@ -119,7 +118,7 @@ test("run load with various inputs and expect premade responses", async ({
     const history = document.querySelector(".repl-history");
     return history ? history.children[3]?.textContent : null;
   });
-  expect(child3).toEqual("Load requires 1 arguments but you provided 2");
+  expect(child3).toEqual("Load requires 1 argument but you provided 2");
 });
 
 //TEST VIEW -- not sure how to test viewing our actual datasets bc not sure what to "expect" (formatting wise)
@@ -213,14 +212,18 @@ test("run search and check that error/success messages correct", async ({
   });
   expect(child1).toEqual("Successfully loaded");
 
-  //SUCCESSFUL SEARCH
-  await page.getByLabel("Command input").fill("search 1 1");
+  //SUCCESSFUL SEARCH WITH HEADER NAME
+  await page.getByLabel("Command input").fill("search Name Jasper");
   await page.getByRole("button", { name: "Submit" }).click();
   const child2 = await page.evaluate(() => {
     const history = document.querySelector(".repl-history");
     return history ? history.children[3]?.textContent : null;
   });
   expect(child2).toEqual("100Jasper0.50.93.4");
+
+  //SUCCESSFUL SEARCH WITH HEADER INDEX
+
+  //SUCCESSFUL SEARCH WITHOUT HEADER
 
   //SEARCH WRONG PARAMETERS
   await page.getByLabel("Command input").fill("search 1 1 2");

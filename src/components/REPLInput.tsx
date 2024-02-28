@@ -2,7 +2,7 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { HistoryElement } from "./historyElement";
-import { ReactElement } from 'react';
+import { ReactElement } from "react";
 
 import { view, search, loadFile } from "./CSVFunctions";
 
@@ -27,7 +27,7 @@ export function REPLInput(props: REPLInputProps) {
     mode: handleMode,
     view: view,
     search: search,
-    load_file: loadFile
+    load_file: loadFile,
   };
   // TODO WITH TA: build a handleSubmit function called in button onClick
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
@@ -40,32 +40,30 @@ export function REPLInput(props: REPLInputProps) {
   function handleMode(inputString: string[]) {
     if (inputString.length != 1) {
       return (
-        <span>Mode takes one argument, 'brief' or 'verbose', but you provided {inputString.length}</span>
+        <span>
+          Mode takes one argument, 'brief' or 'verbose', but you provided{" "}
+          {inputString.length}
+        </span>
       );
     }
     if (inputString[0] == "brief") {
       if (isBrief) {
-      return (
-        <span>You are already in brief mode</span>
-      );
+        return <span>You are already in brief mode</span>;
       }
       setIsBrief(true);
-      return (
-        <span>Success! You have switched to brief mode</span>
-      );
+      return <span>Success! You have switched to brief mode</span>;
     } else if (inputString[0] == "verbose") {
       if (!isBrief) {
-        return (
-         <span>You are already in verbose mode</span>
-        );
+        return <span>You are already in verbose mode</span>;
       }
       setIsBrief(false);
-      return (
-        <span>Success! You have switched to verbose mode</span>
-      );
+      return <span>Success! You have switched to verbose mode</span>;
     } else {
       return (
-        <span>Mode argument must be either 'brief' or 'verbose', but you provided {inputString[0]}</span>
+        <span>
+          Mode argument must be either 'brief' or 'verbose', but you provided{" "}
+          {inputString[0]}
+        </span>
       );
     }
   }
@@ -77,11 +75,11 @@ export function REPLInput(props: REPLInputProps) {
       response: <span></span>,
       command: command,
       isBrief: isBrief,
-      fullCommand: commandString
+      fullCommand: commandString,
     };
     tokens.shift();
     if (!(command in functionMap)) {
-      functionResult.response = <span>Command '{command}' not found.</span>
+      functionResult.response = <span>Command '{command}' not found.</span>;
     } else {
       functionResult.response = functionMap[command](tokens);
     }
