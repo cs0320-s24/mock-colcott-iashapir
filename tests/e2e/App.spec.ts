@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 
 /**
  * TESTS TO WRITE:
- * - load then view then search
- * - load one file then load a different file
- * - test every case for error messages
+ * - load then view then search DONE
+ * - load one file then load a different file DONE
+ * - test every case for error messages DONE
  */
 
 // If you needed to do something before every test case...
@@ -12,12 +12,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:8000/");
 });
 
-/**
- * Don't worry about the "async" yet. We'll cover it in more detail
- * for the next sprint. For now, just think about "await" as something
- * you put before parts of your test that might take time to run,
- * like any interaction with the page.
- */
 test("on page load, i see a login button", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
   await expect(page.getByLabel("Login")).toBeVisible();
@@ -119,6 +113,15 @@ test("run load with various inputs and expect premade responses", async ({
     return history ? history.children[3]?.textContent : null;
   });
   expect(child3).toEqual("Load requires 1 argument but you provided 2");
+
+  //TEST FILE NOT FOUND
+  await page.getByLabel("Command input").fill("load_file fakefile");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child4 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[4]?.textContent : null;
+  });
+  expect(child4).toEqual("File 'fakefile' not found");
 });
 
 //TEST VIEW -- not sure how to test viewing our actual datasets bc not sure what to "expect" (formatting wise)
@@ -221,10 +224,6 @@ test("run search and check that error/success messages correct", async ({
   });
   expect(child2).toEqual("100Jasper0.50.93.4");
 
-  //SUCCESSFUL SEARCH WITH HEADER INDEX
-
-  //SUCCESSFUL SEARCH WITHOUT HEADER
-
   //SEARCH WRONG PARAMETERS
   await page.getByLabel("Command input").fill("search 1 1 2");
   await page.getByRole("button", { name: "Submit" }).click();
@@ -234,12 +233,21 @@ test("run search and check that error/success messages correct", async ({
   });
   expect(child3).toEqual("Search requires 2 arguments but you provided 3");
 
+  //SUCCESSFUL SEARCH WITH HEADER INDEX
+  await page.getByLabel("Command input").fill("search 1 Jasper");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const childx = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[5]?.textContent : null;
+  });
+  expect(childx).toEqual("100Jasper0.50.93.4");
+
   //SEARCH UNSUCCESSFUL --> first load blank data
   await page.getByLabel("Command input").fill("load_file ./blank_csv");
   await page.getByRole("button", { name: "Submit" }).click();
   const child4 = await page.evaluate(() => {
     const history = document.querySelector(".repl-history");
-    return history ? history.children[5]?.textContent : null;
+    return history ? history.children[6]?.textContent : null;
   });
   expect(child4).toEqual("Successfully loaded");
 
@@ -248,7 +256,79 @@ test("run search and check that error/success messages correct", async ({
   await page.getByRole("button", { name: "Submit" }).click();
   const child5 = await page.evaluate(() => {
     const history = document.querySelector(".repl-history");
-    return history ? history.children[6]?.textContent : null;
+    return history ? history.children[7]?.textContent : null;
   });
   expect(child5).toEqual("Search unsuccessful");
+});
+
+//TEST SEARCH WITHOUT HEADER
+test("run search with file that has no header", async ({ page }) => {
+  //SETUP
+  //await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  //LOAD NO HEADER DATA
+  await page
+    .getByLabel("Command input")
+    .fill("load_file ./star_csv_no_headers");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child1 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[1]?.textContent : null;
+  });
+  expect(child1).toEqual("Successfully loaded");
+
+  //SUCCESSFUL SEARCH WITH HEADER NAME
+  await page.getByLabel("Command input").fill("search 1 Jasper");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child2 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[2]?.textContent : null;
+  });
+  expect(child2).toEqual("100Jasper0.50.93.4");
+});
+
+//TEST SERIES OF LOAD/VIEW/SEARCH
+test("run series of load, view, search", async ({ page }) => {
+  //SETUP
+  //await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  //LOAD NO HEADER DATA
+  await page
+    .getByLabel("Command input")
+    .fill("load_file ./star_csv_no_headers");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child1 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[1]?.textContent : null;
+  });
+  expect(child1).toEqual("Successfully loaded");
+
+  //VIEW THE DATA
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child2 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[2]?.textContent : null;
+  });
+  expect(child2).toContain("Isabelle");
+
+  //LOAD DIFFERENT FILE
+  await page.getByLabel("Command input").fill("load_file ./student_csv");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child3 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[3]?.textContent : null;
+  });
+  expect(child1).toEqual("Successfully loaded");
+
+  //SEARCH NEW FILE
+  await page.getByLabel("Command input").fill("search Height 72");
+  await page.getByRole("button", { name: "Submit" }).click();
+  const child4 = await page.evaluate(() => {
+    const history = document.querySelector(".repl-history");
+    return history ? history.children[4]?.textContent : null;
+  });
+  expect(child4).toEqual("Charlie202672170");
 });
