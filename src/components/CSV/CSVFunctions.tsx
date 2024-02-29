@@ -1,125 +1,155 @@
-const starCSV = [["StarID", "Name", "X", "Y", "Z"],
-                  ["100", "Jasper", "0.55", "0.9", "3.4"],
-                  ["101", "Isabelle", "0.7", "1.8", "8.9"]];
+const starCSV = [
+  ["StarID", "Name", "X", "Y", "Z"],
+  ["100", "Jasper", "0.55", "0.9", "3.4"],
+  ["101", "Isabelle", "0.7", "1.8", "8.9"],
+];
 
-const studentCSV = [["Name", "GradYear", "Height", "Weight"],
-                  ["Jasper", "2027", "70", "180"],
-                  ["Charlie", "2026", "72", "170"],
-                  ["Ashley", "2025", "67", "120"],
-                  ["Lucas", "2024", "80", "220"]];
+const studentCSV = [
+  ["Name", "GradYear", "Height", "Weight"],
+  ["Jasper", "2027", "70", "180"],
+  ["Charlie", "2026", "72", "170"],
+  ["Ashley", "2025", "67", "120"],
+  ["Lucas", "2024", "80", "220"],
+];
+//same student data without header row
+const noHeadersStudentCSV = [
+  ["Jasper", "2027", "70", "180"],
+  ["Charlie", "2026", "72", "170"],
+  ["Ashley", "2025", "67", "120"],
+  ["Lucas", "2024", "80", "220"],
+];
+//same star data without header row
+const noHeadersStarCSV = [
+  ["100", "Jasper", "0.55", "0.9", "3.4"],
+  ["101", "Isabelle", "0.7", "1.8", "8.9"],
+];
 
-const noHeadersStudentCSV = [["Jasper", "2027", "70", "180"],
-                  ["Charlie", "2026", "72", "170"],
-                  ["Ashley", "2025", "67", "120"],
-                  ["Lucas", "2024", "80", "220"]];
-
-const noHeadersStarCSV = [["100", "Jasper", "0.55", "0.9", "3.4"],
-                  ["101", "Isabelle", "0.7", "1.8", "8.9"]];
-
+//blank csv for testing
 const blankCSV = [[""]];
 
+//maps filepaths to their corresponding data
 const csvFileMap: Map<string, string[][]> = new Map([
-    ["./star_csv", starCSV],
-    ["./student_csv", studentCSV],
-    ["./blank_csv", blankCSV],
-    ["./star_csv_no_headers", noHeadersStarCSV],
-    ["./student_csv_no_headers", noHeadersStudentCSV]
+  ["./star_csv", starCSV],
+  ["./student_csv", studentCSV],
+  ["./blank_csv", blankCSV],
+  ["./star_csv_no_headers", noHeadersStarCSV],
+  ["./student_csv_no_headers", noHeadersStudentCSV],
 ]);
 
+//maps csv files to the arguments we should search to access data in those files
 const fileNameToArgs: Map<string[][], string[][]> = new Map([
-    [starCSV, [["Name", "Jasper"], ["1", "Jasper"]]],
-    [studentCSV, [["Height", "72"], ["2", "72"]]],
-    [noHeadersStarCSV, [["1", "Jasper"]]],
-    [noHeadersStudentCSV, [["2", "72"]]]
+  [
+    starCSV,
+    [
+      ["Name", "Jasper"],
+      ["1", "Jasper"],
+    ],
+  ],
+  [
+    studentCSV,
+    [
+      ["Height", "72"],
+      ["2", "72"],
+    ],
+  ],
+  [noHeadersStarCSV, [["1", "Jasper"]]],
+  [noHeadersStudentCSV, [["2", "72"]]],
 ]);
 
 const starResults = [["100", "Jasper", "0.5", "0.9", "3.4"]];
 const studentResults = [["Charlie", "2026", "72", "170"]];
 
+//maps datasets to the rows we return on search successful call
 const csvSearchMap: Map<string[][], string[][]> = new Map([
-    [starCSV, starResults],
-    [studentCSV, studentResults],
-    [noHeadersStarCSV, starResults],
-    [noHeadersStudentCSV, studentResults]
+  [starCSV, starResults],
+  [studentCSV, studentResults],
+  [noHeadersStarCSV, starResults],
+  [noHeadersStudentCSV, studentResults],
 ]);
 
 var currentCSV = [[""]];
 var isLoaded = false;
 
 function containsArray(arrays: string[][], targetArray: string[]): boolean {
-    return arrays.some(array => array.every((value, index) => value === targetArray[index]));
+  return arrays.some((array) =>
+    array.every((value, index) => value === targetArray[index])
+  );
 }
 
-export function view(args: string[]){
-    if (!isLoaded){
-        return(
-            <span>View requires a file to have been loaded using load_file but no file is loaded yet</span>
-        );
-    }
-    if(args.length != 0){
-        return(
-            <span>View requires 0 arguments but you provided {args.length}</span>
-        );
-    }
-    return convertStringList(currentCSV);
+export function view(args: string[]) {
+  if (!isLoaded) {
+    return (
+      <span>
+        View requires a file to have been loaded using load_file but no file is
+        loaded yet
+      </span>
+    );
+  }
+  if (args.length != 0) {
+    return (
+      <span>View requires 0 arguments but you provided {args.length}</span>
+    );
+  }
+  return convertStringList(currentCSV);
 }
 
-export function loadFile(args: string[]){
-    if(args.length != 1){
-        return(
-            <span>Load requires 1 argument but you provided {args.length}</span>
-        );
-    }
-    const fileName = args[0];
-    const successResponse = <span>Successfully loaded</span>;
-    if(fileName == "./malformed_csv"){
-        return <span>Malformed csv file</span>;
-    }
-    if(csvFileMap.has(fileName)){
-        currentCSV = csvFileMap.get(fileName)!;
-        setLoadedTrue();
-        return successResponse;
-    }else{
-        return <span>File '{fileName}' not found</span>;
-    }
+export function loadFile(args: string[]) {
+  if (args.length != 1) {
+    return <span>Load requires 1 argument but you provided {args.length}</span>;
+  }
+  const fileName = args[0];
+  const successResponse = <span>Successfully loaded</span>;
+  if (fileName == "./malformed_csv") {
+    return <span>Malformed csv file</span>;
+  }
+  if (csvFileMap.has(fileName)) {
+    currentCSV = csvFileMap.get(fileName)!;
+    setLoadedTrue();
+    return successResponse;
+  } else {
+    return <span>File '{fileName}' not found</span>;
+  }
 }
 
-export function setLoadedTrue(){
-    if(!isLoaded){
-        isLoaded = true;
-    }
+export function setLoadedTrue() {
+  if (!isLoaded) {
+    isLoaded = true;
+  }
 }
 //search (from server) returns "error_bad_request" for any bad inputs. thus no checking parameters?
-//args should be 
-export function search(args: string[]){
-    if (!isLoaded){
-        return(
-            <span>Search requires a file to have been loaded using load_file but no file is loaded yet</span>
-        );
-    }
-    if(args.length != 2){
-        return(
-            <span>Search requires 2 arguments but you provided {args.length}</span>
-        );
-    }
-    if(fileNameToArgs.has(currentCSV)){
-        if(containsArray(fileNameToArgs.get(currentCSV)!, args)){
-            return convertStringList(csvSearchMap.get(currentCSV)!);
-        }
-    }
-    return <span>Search unsuccessful</span>
-}
-
-export function convertStringList(data: string[][]){
+//args should be
+export function search(args: string[]) {
+  if (!isLoaded) {
     return (
-        <table>
-            {data.map((row) =>
-            <tr>
-                {row.map((element) =>
-                <td>{element}</td>)}
-            </tr>)
-            }
-        </table>
+      <span>
+        Search requires a file to have been loaded using load_file but no file
+        is loaded yet
+      </span>
     );
+  }
+  if (args.length != 2) {
+    return (
+      <span>Search requires 2 arguments but you provided {args.length}</span>
+    );
+  }
+  if (fileNameToArgs.has(currentCSV)) {
+    if (containsArray(fileNameToArgs.get(currentCSV)!, args)) {
+      return convertStringList(csvSearchMap.get(currentCSV)!);
+    }
+  }
+  return <span>Search unsuccessful</span>;
 }
 
+export function convertStringList(data: string[][]) {
+  return (
+    <table>
+      {data.map((row) => (
+        <tr>
+          {row.map((element) => (
+            <td>{element}</td>
+          ))}
+        </tr>
+      ))}
+    </table>
+  );
+}
