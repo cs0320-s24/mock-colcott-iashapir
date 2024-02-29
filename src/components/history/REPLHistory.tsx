@@ -11,18 +11,18 @@ export function REPLHistory(props: REPLHistoryProps) {
       <p>Command history:</p>
       {/* This is where command history will go */}
       {/* TODO: To go through all the pushed commands... try the .map() function! */}
-      {props.history.map((command) => (
+      {props.history.map((command) =>
         command.isBrief ? (
-            <div className="repl-history-output">
-                <p>{command.response}</p>
-            </div>
+          <div className="repl-history-output">
+            <p>{command.response}</p>
+          </div>
         ) : (
-            <div className="repl-history-output">
-                <p>Command: {command.fullCommand}</p>
-                <p>Ouput: {command.response}</p> 
-            </div>
+          <div className="repl-history-output">
+            <p>Command: {command.fullCommand}</p>
+            <p>Ouput: {command.response}</p>
+          </div>
         )
-      ))}
+      )}
     </div>
   );
 }

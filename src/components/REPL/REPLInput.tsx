@@ -1,10 +1,10 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ControlledInput } from "./ControlledInput";
-import { HistoryElement } from "./historyElement";
+import { ControlledInput } from "../ControlledInput";
+import { HistoryElement } from "../history/historyElement";
 import { ReactElement } from "react";
 
-import { view, search, loadFile } from "./CSVFunctions";
+import { view, search, loadFile } from "../CSVFunctions";
 
 interface REPLInputProps {
   history: HistoryElement[];
