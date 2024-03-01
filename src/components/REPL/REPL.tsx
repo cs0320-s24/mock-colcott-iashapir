@@ -13,16 +13,18 @@ import { HistoryElement } from "../history/historyElement";
   You don't need to do that for this gearup.
 */
 
+/**
+ * displays the REPLHistory, which contains all of the past command results, and displays
+ * the REPLInput, which contains all of the user input functionality
+ * 
+ * @return both the REPLHistory and the REPLInput
+ */
 export default function REPL() {
-  // TODO: Add some kind of shared state that holds all the commands submitted.
 
   const [history, setHistory] = useState<HistoryElement[]>([]);
 
   return (
     <div className="repl">
-      {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
-      component or somewhere else depending on your component organization. What are the pros and cons of each? */}
-      {/* TODO: Update your REPLHistory and REPLInput to take in new shared state as props */}
       <REPLHistory history={history} />
       <hr></hr>
       <REPLInput history={history} setHistory={setHistory} />
