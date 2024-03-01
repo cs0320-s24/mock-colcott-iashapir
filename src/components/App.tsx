@@ -4,7 +4,10 @@ import { LoginButton } from './LoginButton';
 import REPL from './REPL';
 
 /**
- * This is the highest level component!
+ * This is the highest level component. It keeps track of whether the user is logged in by updating a 
+ * variable 'isLoggedIn'. 
+ * 
+ * @return an html container that displays the text 'Mock' and the LoginButton
  */
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);

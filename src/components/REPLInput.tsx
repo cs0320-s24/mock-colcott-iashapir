@@ -6,53 +6,63 @@ import { ReactElement } from "react";
 
 import { view, search, loadFile } from "./CSVFunctions";
 
+/**
+  * An interface containing a history field, which is a list of HistoryElements and a 
+  * setHistory fuction which updates the history field
+  */
 interface REPLInputProps {
   history: HistoryElement[];
   setHistory: Dispatch<SetStateAction<HistoryElement[]>>;
-  // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
 }
-// You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
-// REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
+
+/**
+ * Creates an html container for the user input area which contains a ControlledInput for user to input commands,
+ * as well as a 'Submit' button for users to click in order to submit their input.
+ *
+ * @param props - A REPLInputProps interface containing a list of HistoryElements and a setHistory function
+ * @return an html container that contains a fieldset for the REPL input along with a 'Submit' button
+ */
 export function REPLInput(props: REPLInputProps) {
-  // Remember: let React manage state in your webapp.
-  // Manages the contents of the input box
   const [commandString, setCommandString] = useState<string>("");
-  // TODO WITH TA : add a count state
 
   const [isBrief, setIsBrief] = useState<boolean>(true);
 
-  const functionMap: Readonly<{
+  /**
+  * A map that maps function names (as strings and with their arguments as an array of strings) to 
+  * their respective functions that return ReactElements.
+  */
+  const functionMap: {
     [key: string]: (args: string[]) => ReactElement;
-  }> = {
+  } = {
     mode: handleMode,
     view: view,
     search: search,
     load_file: loadFile,
   };
-  // TODO WITH TA: build a handleSubmit function called in button onClick
-  // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
-  // add to it with new commands.
-  /**
-   * We suggest breaking down this component into smaller components, think about the individual pieces
-   * of the REPL and how they connect to each other...
-   */
 
-  function handleMode(inputString: string[]) {
-    if (inputString.length != 1) {
+  /**
+  * Switches the program's 'mode' to brief or verbose mode by changing the isBrief variable to either true or false 
+  * respectively. 
+  *
+  * @param args - An array of the strings which are the arguments provided by the user that followed the 'mode' command
+  * @return a react element containing either a failure message or a success message
+  */
+  function handleMode(args: string[]) {
+    if (args.length != 1) {
       return (
         <span>
           Mode takes one argument, 'brief' or 'verbose', but you provided{" "}
-          {inputString.length}
+          {args.length}
         </span>
       );
     }
-    if (inputString[0] == "brief") {
+    if (args[0] == "brief") {
       if (isBrief) {
         return <span>You are already in brief mode</span>;
       }
       setIsBrief(true);
       return <span>Success! You have switched to brief mode</span>;
-    } else if (inputString[0] == "verbose") {
+    } else if (args[0] == "verbose") {
       if (!isBrief) {
         return <span>You are already in verbose mode</span>;
       }
@@ -62,12 +72,19 @@ export function REPLInput(props: REPLInputProps) {
       return (
         <span>
           Mode argument must be either 'brief' or 'verbose', but you provided{" "}
-          {inputString[0]}
+          {args[0]}
         </span>
       );
     }
   }
 
+  /**
+  * Called when the Submit button is clicked. Tokenizes the user input and calls the appropriate function based on the 
+  * command specified by the user with the rest of the input's tokens as the arguments to the function call. 
+  * Updates the REPL history by calling setHistory, adding the result of the function call to the REPL history
+  *
+  * @param commandString - the string of user input containing the command to be run
+  */
   function handleSubmit(commandString: string) {
     const tokens = commandString.split(" ");
     const command = tokens[0];
@@ -96,10 +113,6 @@ export function REPLInput(props: REPLInputProps) {
 
   return (
     <div className="repl-input">
-      {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
-            braces, so that React knows it should be interpreted as TypeScript */}
-      {/* I opted to use this HTML tag; you don't need to. It structures multiple input fields
-            into a single unit, which makes it easier for screenreaders to navigate. */}
       <fieldset>
         <legend>Enter a command:</legend>
         <ControlledInput
