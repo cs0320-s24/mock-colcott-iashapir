@@ -104,7 +104,7 @@ export function loadFile(args: string[]){
     }
 }
 
-export function setLoadedTrue(){
+function setLoadedTrue(){
     if(!isLoaded){
         isLoaded = true;
     }
@@ -144,7 +144,7 @@ export function search(args: string[]){
  * @param data - A list of lists of strings to be converted to a ReactElement table
  * @return a ReactElement table generated from the provided list of lists of strings
  */
-export function convertStringList(data: string[][]){
+function convertStringList(data: string[][]){
     return (
         <table>
             {data.map((row) =>
