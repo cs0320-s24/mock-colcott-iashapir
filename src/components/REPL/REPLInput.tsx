@@ -1,4 +1,4 @@
-import "../styles/main.css";
+import "../../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { HistoryElement } from "../history/historyElement";
@@ -7,9 +7,9 @@ import { ReactElement } from "react";
 import { view, search, loadFile } from "../CSV/CSVFunctions";
 
 /**
-  * An interface containing a history field, which is a list of HistoryElements and a 
-  * setHistory fuction which updates the history field
-  */
+ * An interface containing a history field, which is a list of HistoryElements and a
+ * setHistory fuction which updates the history field
+ */
 interface REPLInputProps {
   history: HistoryElement[];
   setHistory: Dispatch<SetStateAction<HistoryElement[]>>;
@@ -28,9 +28,9 @@ export function REPLInput(props: REPLInputProps) {
   const [isBrief, setIsBrief] = useState<boolean>(true);
 
   /**
-  * A map that maps function names (as strings and with their arguments as an array of strings) to 
-  * their respective functions that return ReactElements.
-  */
+   * A map that maps function names (as strings and with their arguments as an array of strings) to
+   * their respective functions that return ReactElements.
+   */
   const functionMap: {
     [key: string]: (args: string[]) => ReactElement;
   } = {
@@ -41,12 +41,12 @@ export function REPLInput(props: REPLInputProps) {
   };
 
   /**
-  * Switches the program's 'mode' to brief or verbose mode by changing the isBrief variable to either true or false 
-  * respectively. 
-  *
-  * @param args - An array of the strings which are the arguments provided by the user that followed the 'mode' command
-  * @return a react element containing either a failure message or a success message
-  */
+   * Switches the program's 'mode' to brief or verbose mode by changing the isBrief variable to either true or false
+   * respectively.
+   *
+   * @param args - An array of the strings which are the arguments provided by the user that followed the 'mode' command
+   * @return a react element containing either a failure message or a success message
+   */
   function handleMode(args: string[]) {
     if (args.length != 1) {
       return (
@@ -79,12 +79,12 @@ export function REPLInput(props: REPLInputProps) {
   }
 
   /**
-  * Called when the Submit button is clicked. Tokenizes the user input and calls the appropriate function based on the 
-  * command specified by the user with the rest of the input's tokens as the arguments to the function call. 
-  * Updates the REPL history by calling setHistory, adding the result of the function call to the REPL history
-  *
-  * @param commandString - the string of user input containing the command to be run
-  */
+   * Called when the Submit button is clicked. Tokenizes the user input and calls the appropriate function based on the
+   * command specified by the user with the rest of the input's tokens as the arguments to the function call.
+   * Updates the REPL history by calling setHistory, adding the result of the function call to the REPL history
+   *
+   * @param commandString - the string of user input containing the command to be run
+   */
   function handleSubmit(commandString: string) {
     const tokens = commandString.split(" ");
     const command = tokens[0];
