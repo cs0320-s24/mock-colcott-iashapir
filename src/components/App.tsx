@@ -4,9 +4,9 @@ import { LoginButton } from "./LoginButton";
 import REPL from "./REPL/REPL";
 
 /**
- * This is the highest level component. It keeps track of whether the user is logged in by updating a 
- * variable 'isLoggedIn'. 
- * 
+ * This is the highest level component. It keeps track of whether the user is logged in by updating a
+ * variable 'isLoggedIn'.
+ *
  * @return an html container that displays the text 'Mock' and the LoginButton
  */
 function App() {
@@ -19,7 +19,7 @@ function App() {
         <LoginButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       </p>
 
-      { isLoggedIn && <REPL /> }
+      {isLoggedIn && <REPL />}
     </div>
   );
 }

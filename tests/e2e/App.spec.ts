@@ -332,3 +332,30 @@ test("run series of load, view, search", async ({ page }) => {
   });
   expect(child4).toEqual("Charlie202672170");
 });
+
+// //TEST SEARCH WITH HEADER ON DATA WITH NO HEADER
+// test("run test with no header data but search with header", async ({ page }) => {
+//   //SETUP
+//   //await page.goto("http://localhost:8000/");
+//   await page.getByLabel("Login").click();
+
+//   //LOAD NO HEADER DATA
+//   await page
+//     .getByLabel("Command input")
+//     .fill("load_file ./student_csv_no_headers");
+//   await page.getByRole("button", { name: "Submit" }).click();
+//   const child1 = await page.evaluate(() => {
+//     const history = document.querySelector(".repl-history");
+//     return history ? history.children[1]?.textContent : null;
+//   });
+//   expect(child1).toEqual("Successfully loaded");
+
+//   //UNSUCCESSFUL SEARCH WITH HEADER NAME
+//   await page.getByLabel("Command input").fill("search 1 Jasper");
+//   await page.getByRole("button", { name: "Submit" }).click();
+//   const child2 = await page.evaluate(() => {
+//     const history = document.querySelector(".repl-history");
+//     return history ? history.children[2]?.textContent : null;
+//   });
+//   expect(child2).toEqual("100Jasper0.50.93.4");
+// });
